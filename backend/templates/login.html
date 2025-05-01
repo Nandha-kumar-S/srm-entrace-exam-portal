@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>SRMJEEH Entrance Exam Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @media (max-width: 768px) {
+            .top-navigation {
+                flex-direction: column;
+                padding: 10px;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            .nav-link {
+                margin: 5px;
+            }
+            .login-container {
+                width: 95%;
+                padding: 15px;
+            }
+            .contact-info {
+                font-size: 0.8em;
+            }
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: url('/static/images/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+        }
+        .login-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .login-loader .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 86, 179, 0.8) 0%, rgba(0, 53, 128, 0.8) 100%);
+            z-index: 1;
+        }
+        .top-navigation {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 50px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid #e0e0e0;
+            position: relative;
+            z-index: 3;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .top-left-logo {
+            max-height: 60px;
+            width: auto;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        .nav-link {
+            color: #0056b3;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 25px;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+        .nav-link:hover {
+            color: #003580;
+            text-decoration: underline;
+        }
+        .login-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        .login-container {
+            width: 400px;
+            max-width: 95%;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            margin: 0 auto;
+        }
+        .login-container img {
+            max-width: 250px;
+            margin-bottom: 30px;
+        }
+        .login-container h2 {
+            color: #0056b3;
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+        .form-control {
+            height: 50px;
+            border-radius: 8px;
+            border-color: #ced4da;
+        }
+        .form-control:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 0 0.2rem rgba(0,86,179,0.25);
+        }
+        .btn-primary {
+            background-color: #0056b3;
+            border: none;
+            height: 50px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            background-color: #003580;
+            transform: translateY(-2px);
+        }
+        .login-footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .password-container {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6c757d;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        .toggle-password:hover {
+            opacity: 1;
+        }
+        .contact-info {
+            margin-top: 25px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-navigation">
+        <div class="logo-container">
+            <img src="/static/images/srm-logo-1.png" alt="SRM Logo" class="top-left-logo">
+        </div>
+        <div class="nav-links">
+            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#homeModal">Home</a>
+            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#importantDatesModal">Important Dates</a>
+            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#aboutUsModal">About Us</a>
+            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#disclosuresModal">Disclosures</a>
+            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#workHubModal">Work Hub Connect</a>
+        </div>
+    </div>
+    <div class="login-wrapper">
+        <div class="login-container">
+        <img src="/static/images/srm-logo.png" alt="SRM Logo" class="mb-4">
+        <h2>SRMJEEH Entrance Exam Portal</h2>
+        <form id="loginForm">
+            <div class="mb-3">
+                <input type="email" class="form-control" id="email" placeholder="Registered Email ID" required>
+            </div>
+            <div class="mb-3 password-container">
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" id="eyeIcon" style="display: block;">
+                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash" id="eyeSlashIcon" style="display: none;">
+                            <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755l.708.707z"/>
+                            <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943-1.299l.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>
+                            <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.028 7.028 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884l-12-12 .708-.708 12 12-.708.708z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+            
+            <div id="errorMessage" class="error-message mt-3" style="display:none;">
+                <h4>Login Failed</h4>
+                <ol>
+                    <li>Your current password seems to be incorrect.</li>
+                    <li>We recommend resetting your Google Account password:</li>
+                    <li>Click <a href="https://accounts.google.com/signin/recovery" target="_blank">Reset Password</a></li>
+                    <li>After resetting, try logging in again with your new password.</li>
+                </ol>
+            </div>
+            
+            <div class="login-footer mt-3">
+                <p class="mt-2">New User? <a href="#" class="text-primary">Register Here</a></p>
+            </div>
+
+            <div class="login-loader">
+                <div class="spinner"></div>
+            </div>
+
+            <div class="contact-info">
+                <p><strong>Admission Helpline:</strong></p>
+                <p>UG & PG Enquiries: 080-4749-3102</p>
+                <p>Diploma & Certificate: +91-8925801552</p>
+            </div>
+        </form>
+    </div>
+    </div>
+
+    <!-- About Us Modal -->
+    <div class="modal fade" id="aboutUsModal" tabindex="-1" aria-labelledby="aboutUsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="aboutUsModalLabel">About SRMJEEH Entrance Exam Portal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4>Our Vision</h4>
+                    <p>The SRM Institute of Health Sciences (SRMJEEH) is dedicated to nurturing the next generation of healthcare professionals through a comprehensive and innovative entrance examination process.</p>
+                    
+                    <h4>Entrance Examination Process</h4>
+                    <p>Our entrance exam assesses:</p>
+                    <ol>
+                        <li>Comprehensive subject knowledge</li>
+                        <li>Critical thinking skills</li>
+                        <li>Problem-solving abilities</li>
+                        <li>Analytical reasoning</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disclosures Modal -->
+    <div class="modal fade" id="disclosuresModal" tabindex="-1" aria-labelledby="disclosuresModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="disclosuresModalLabel">Entrance Exam Disclosures</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Important Notice:</strong> Carefully read and understand these disclosures before applying.
+                    </div>
+                    
+                    <h4>Examination Integrity</h4>
+                    <p>Any form of malpractice will result in immediate disqualification:</p>
+                    <ul>
+                        <li>Copying</li>
+                        <li>Using unauthorized materials</li>
+                        <li>Impersonation</li>
+                        <li>Sharing exam content</li>
+                    </ul>
+                    
+                    <h4>Data Privacy</h4>
+                    <p>We protect your personal information:</p>
+                    <ul>
+                        <li>Data collected solely for admission purposes</li>
+                        <li>Stored securely and confidentially</li>
+                        <li>Compliance with data protection regulations</li>
+                    </ul>
+                    
+                    <h4>Contact for Queries</h4>
+                    <p>Email: admissions@srmjeeh.in</p>
+                    <p>Helpline: 080-4749-3102</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Work Hub Connect Modal -->
+    <div class="modal fade" id="workHubModal" tabindex="-1" aria-labelledby="workHubModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="workHubModalLabel">Work Hub Connect</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4>Professional Networking for Healthcare Professionals</h4>
+                    <p>Work Hub Connect is an exclusive platform for SRMJEEH students and alumni to:</p>
+                    <ul>
+                        <li>Network with healthcare professionals</li>
+                        <li>Explore job opportunities</li>
+                        <li>Access continuing education resources</li>
+                        <li>Participate in professional development workshops</li>
+                    </ul>
+                    
+                    <h4>Key Benefits</h4>
+                    <ol>
+                        <li>Direct connection with leading healthcare institutions</li>
+                        <li>Mentorship programs</li>
+                        <li>Career counseling</li>
+                        <li>Research collaboration opportunities</li>
+                    </ol>
+                    
+                    <p class="text-muted">Coming Soon: Full platform launch</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Home Modal -->
+    <div class="modal fade" id="homeModal" tabindex="-1" aria-labelledby="homeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="homeModalLabel">SRMJEEH Entrance Exam Portal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Welcome to the SRMJEEH Entrance Exam Portal for Postgraduate Health Science Programs.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Important Dates Modal -->
+    <div class="modal fade" id="importantDatesModal" tabindex="-1" aria-labelledby="importantDatesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importantDatesModalLabel">Important Dates for SRMJEEH PG Health Science Programs</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Event</th>
+                                <th>Phase 1*</th>
+                                <th>Phase 2*</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Application Deadline</td>
+                                <td>09/04/2025</td>
+                                <td>30/05/2025</td>
+                            </tr>
+                            <tr>
+                                <td>SRMJEEH Exam (Remote Proctored Online Mode)**</td>
+                                <td>15/04/2025 (Tue) & 16/04/2025 (Wed)</td>
+                                <td>05/06/2025 (Thu) & 06/06/2025 (Fri)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="text-muted">
+                        * Dates are subject to change. Please check official notifications.
+                        ** Exam timings and details will be communicated separately.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.togglePasswordVisibility = function() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            const eyeSlashIcon = document.getElementById('eyeSlashIcon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.style.display = 'block';
+                eyeSlashIcon.style.display = 'none';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.style.display = 'none';
+                eyeSlashIcon.style.display = 'block';
+            }
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const loginLoader = document.querySelector('.login-loader');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            loginLoader.style.display = 'flex';
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const result = await response.json();
+
+                setTimeout(() => {
+                    loginLoader.style.display = 'none';
+                    if (result.status === 'success') {
+                        window.location.href = result.redirect_url;
+                    } else {
+                        errorMessage.style.display = 'block';
+                    }
+                }, 2000);
+
+            } catch (error) {
+                setTimeout(() => {
+                    loginLoader.style.display = 'none';
+                    errorMessage.style.display = 'block';
+                }, 2000);
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', handleLogin);
+    </script>
+</body>
+</html>

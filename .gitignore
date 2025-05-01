@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Credentials and Secrets
+backend/credentials/
+backend/client_secrets.json
+*.json
+
+# Deployment
+.netlify/
+
+# Misc
+.DS_Store
+.env
+.idea/
+.vscode/
