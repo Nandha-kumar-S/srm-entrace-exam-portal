@@ -9,7 +9,23 @@
         @media (max-width: 768px) {
             .top-navigation {
                 flex-direction: column;
+                align-items: center; /* Center items in mobile view */
                 padding: 10px;
+            }
+            .logo-container {
+                flex-direction: column; /* Stack logo and title/slogan */
+                text-align: center; /* Center text below logo */
+                margin-bottom: 10px;
+            }
+            .top-left-logo {
+                margin-right: 0; /* Remove right margin for stacked layout */
+                margin-bottom: 5px; /* Space between logo and text */
+            }
+            .app-name {
+                font-size: 1.2rem; /* Adjust for mobile */
+            }
+            .app-slogan {
+                font-size: 0.7rem; /* Adjust for mobile */
             }
             .nav-links {
                 flex-wrap: wrap;
@@ -17,7 +33,8 @@
                 margin-top: 10px;
             }
             .nav-link {
-                margin: 5px;
+                margin: 8px 10px; /* Adjusted for better spacing on mobile */
+                font-size: 0.9rem; /* Slightly smaller font for mobile */
             }
             .login-container {
                 width: 95%;
@@ -86,8 +103,25 @@
             align-items: center;
         }
         .top-left-logo {
-            max-height: 60px;
+            max-height: 50px; /* Adjusted to make space for text */
             width: auto;
+            margin-right: 15px;
+        }
+        .app-title-slogan {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .app-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #003d80; /* Dark blue, matching SRM theme */
+            line-height: 1.2;
+        }
+        .app-slogan {
+            font-size: 0.75rem;
+            color: #555;
+            line-height: 1.2;
         }
         .nav-links {
             display: flex;
@@ -97,13 +131,15 @@
             color: #0056b3;
             text-decoration: none;
             font-weight: 600;
-            margin-left: 25px;
-            transition: color 0.3s ease;
+            margin-left: 20px;
+            padding: 8px 12px;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            border-radius: 5px;
             cursor: pointer;
         }
         .nav-link:hover {
-            color: #003580;
-            text-decoration: underline;
+            color: #003d80;
+            background-color: rgba(0, 86, 179, 0.05);
         }
         .login-wrapper {
             display: flex;
@@ -170,6 +206,18 @@
             margin-top: 20px;
             text-align: left;
         }
+        .error-message ol {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        .contact-support-message {
+            font-weight: 500;
+            color: #555;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+        }
         .password-container {
             position: relative;
         }
@@ -200,6 +248,10 @@
     <div class="top-navigation">
         <div class="logo-container">
             <img src="/static/images/srm-logo-1.png" alt="SRM Logo" class="top-left-logo">
+            <div class="app-title-slogan">
+                <div class="app-name">SRM-ngrok</div>
+                <div class="app-slogan">Everything you need to conduct secure comprehensive exams</div>
+            </div>
         </div>
         <div class="nav-links">
             <a class="nav-link" data-bs-toggle="modal" data-bs-target="#homeModal">Home</a>
@@ -212,7 +264,7 @@
     <div class="login-wrapper">
         <div class="login-container">
         <img src="/static/images/srm-logo.png" alt="SRM Logo" class="mb-4">
-        <h2>SRMJEEH Entrance Exam Portal</h2>
+        <h2>SRMJEEH PG Entrance Exam Portal</h2>
         <form id="loginForm">
             <div class="mb-3">
                 <input type="email" class="form-control" id="email" placeholder="Registered Email ID" required>
@@ -237,12 +289,13 @@
             
             <div id="errorMessage" class="error-message mt-3" style="display:none;">
                 <h4>Login Failed</h4>
-                <ol>
+                <ol class="mb-3">
                     <li>Your current password seems to be incorrect.</li>
                     <li>We recommend resetting your Google Account password:</li>
                     <li>Click <a href="https://accounts.google.com/signin/recovery" target="_blank">Reset Password</a></li>
                     <li>After resetting, try logging in again with your new password.</li>
                 </ol>
+                <p class="contact-support-message">If you are still facing trouble, please contact us!</p>
             </div>
             
             <div class="login-footer mt-3">
@@ -255,8 +308,7 @@
 
             <div class="contact-info">
                 <p><strong>Admission Helpline:</strong></p>
-                <p>UG & PG Enquiries: 080-4749-3102</p>
-                <p>Diploma & Certificate: +91-8925801552</p>
+                <p>admissions.srmonline@srmist.edu.in</p>
             </div>
         </form>
     </div>

@@ -20,4 +20,4 @@ backend/client_secrets.json
 .DS_Store
 .env
 .idea/
-.vscode/
+.vscode/git pull origin main --allow-unrelated-histories

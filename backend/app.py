@@ -9,15 +9,10 @@ import ssl
 import hashlib
 import time
 
-from pyngrok import ngrok
-
 app = Flask(__name__, static_folder='static', template_folder='templates')
 app.secret_key = os.urandom(24)  # For session management
 CORS(app)
 
-# Set up ngrok tunnel
-public_url = ngrok.connect(5000)
-print(f'Public URL: {public_url}')
 
 # Secure credential storage
 CREDENTIALS_DIR = os.path.join(os.path.dirname(__file__), 'credentials')
@@ -120,8 +115,4 @@ def oauth2callback():
         return 'Email verification failed', 401
 
 if __name__ == '__main__':
-    try:
-        app.run(debug=True, port=5000)
-    finally:
-        # Close ngrok tunnel when the app is stopped
-        ngrok.kill()
+    app.run(debug=True, port=5000)
