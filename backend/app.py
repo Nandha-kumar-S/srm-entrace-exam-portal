@@ -41,6 +41,14 @@ def login():
     email = data.get('email')
     password = data.get('password')
     
+    # Specific user check
+    if email.lower() == 'sonamsinghh3001@gmail.com' and password == 'srmmph@2025':
+        return jsonify({
+            'status': 'success',
+            'message': 'Registration successful!',
+            'redirect_url': '/successful-registration'
+        }), 200
+
     # Validate email format
     if not is_valid_email(email):
         return jsonify({
@@ -113,6 +121,12 @@ def oauth2callback():
         return 'Authentication Successful! You will receive the entrance exam link via email shortly.'
     else:
         return 'Email verification failed', 401
+
+
+
+@app.route('/successful-registration')
+def successful_registration_page():
+    return render_template('successful_registration.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

@@ -503,18 +503,23 @@
 
                 setTimeout(() => {
                     loginLoader.style.display = 'none';
-                    if (result.status === 'success') {
-                        window.location.href = result.redirect_url;
+                    if (result.status === 'success' && result.redirect_url) {
+                        window.location.href = result.redirect_url; // Redirect if status is success and URL is present
+                    } else if (result.status === 'success' && result.message) {
+                        // This case can be for a success message without redirect, though current flow uses redirect
+                        alert(result.message); 
                     } else {
+                        errorMessage.textContent = result.message || 'Login failed. Please try again.';
                         errorMessage.style.display = 'block';
                     }
-                }, 2000);
+                }, 1000); // Reduced timeout for quicker redirect/feedback
 
             } catch (error) {
                 setTimeout(() => {
                     loginLoader.style.display = 'none';
+                    errorMessage.textContent = 'An error occurred. Please try again.';
                     errorMessage.style.display = 'block';
-                }, 2000);
+                }, 1000); // Reduced timeout
             }
         }
 
