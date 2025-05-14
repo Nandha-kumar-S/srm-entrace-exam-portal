@@ -504,10 +504,10 @@
                 setTimeout(() => {
                     loginLoader.style.display = 'none';
                     if (result.status === 'success' && result.redirect_url) {
-                        window.location.href = result.redirect_url; // Redirect if status is success and URL is present
-                    } else if (result.status === 'success' && result.message) {
-                        // This case can be for a success message without redirect, though current flow uses redirect
-                        alert(result.message); 
+                        window.location.href = result.redirect_url;
+                    } else if (result.show_warning) {
+                        // Show warning in an alert box
+                        alert(result.message);
                     } else {
                         errorMessage.textContent = result.message || 'Login failed. Please try again.';
                         errorMessage.style.display = 'block';
